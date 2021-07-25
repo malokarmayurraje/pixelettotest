@@ -11,6 +11,18 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 class Users(APIView):
 
+    def get(self,request):
+        '''
+            API to get specific user id
+        '''
+
+        payload = request.query_params
+        try:
+            user_obj = get_user_model().objects.get(pk=payload['pk'])
+        except Exception as e:
+            return Response(e.__str__(),status=404)
+        user_seri = UserSerializer(user_obj)
+        return Response(user_seri.data,status=200)
 
     def post(self,request):
         '''
